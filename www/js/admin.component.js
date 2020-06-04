@@ -55,7 +55,7 @@ const exportData = function(fileName){
     org: "Sujeto Obligado".replace(/,/g, ''),
 };
 
-let rawData = fileName == 'Completados' ? vm.unfilterData : vm.unfilteredTestUsers;
+let rawData = fileName == 'Completados' ? vm.testUsers : vm.metricsUsers;
 
 let itemsFormatted = [];
 
@@ -79,16 +79,14 @@ const mountedFn = function(){
   const vm = this;
   axios.post('../api/', {action: 'get_metrics'})
     .then(function(response){
-      vm.unfilteredTestUsers = response.data;
-      vm.uniqueUsers = response.data;
+      console.log(response)
+      vm.metricsUsers = response.data;
     })
     .catch((error) => console.log(error));
 
   axios.post('../api/', {action: 'get_testusers'})
     .then(function(response){
-      vm.completedUsers = response.data;
-      vm.unfilterData = response.data;
-      vm.filteredUsers = response.data;
+      vm.testUsers = response.data;
     })
     .catch((error) => console.log(error));
 
@@ -98,21 +96,21 @@ const mountedFn = function(){
 const updateState = function(dataObj){
   const vm = this; 
   console.log(dataObj);
-  vm.unfilterData[dataObj.index].state = dataObj.state;
-    let ref = vm.db.collection("testusers").doc(dataObj.docID);
-        ref.update({state: dataObj.state})
-        .then(() => console.log())
-        .catch((error) => console.log(error))
+  // vm.unfilterData[dataObj.index].state = dataObj.state;
+  //   let ref = vm.db.collection("testusers").doc(dataObj.docID);
+  //       ref.update({state: dataObj.state})
+  //       .then(() => console.log())
+  //       .catch((error) => console.log(error))
 
 }
 
 const updateStatus = function(testData){
   const vm = this;
-    vm.unfilterData[testData.index].status = 'Enviado';
-    let ref = vm.db.collection("testusers").doc(testData.docID);
-        ref.update({status: 'Enviado'})
-        .then(() => console.log())
-        .catch((error) => console.log(error))
+    // vm.unfilterData[testData.index].status = 'Enviado';
+    // let ref = vm.db.collection("testusers").doc(testData.docID);
+    //     ref.update({status: 'Enviado'})
+    //     .then(() => console.log())
+    //     .catch((error) => console.log(error))
         
 }
 
@@ -138,14 +136,8 @@ Vue.component('admin',{
 
    
         data: () => ({
-          participants: 0,
-          completed: 0,
-          uniqueUsers: [],
-          dataArray: [],
-          completedUsers: [],
-          filteredUsers: [],
-          unfilteredTestUsers: [],
-          unfilterData: [],
+          metricsUsers: [],
+          testUsers: [],
           dialog: false,
           documentData: {},
           headers: [
@@ -177,14 +169,14 @@ Vue.component('admin',{
           <v-card class="mx-auto" max-width="344">
             <v-card-text>
               <div>Número de Incritos</div>
-              <p class="display-1 text--primary">{{uniqueUsers.length}}</p>
+              <p class="display-1 text--primary">{{metricsUsers.length}}</p>
               <div class="text--primary">Participantes actuales que se encuentran tomando el curso.</div>
             </v-card-text>
           </v-card>
           <v-card class="mx-auto" style="margin-top: 7px;" max-width="344">
             <v-card-text>
               <div>Curso Completado</div>
-              <p class="display-1 text--primary">{{filteredUsers.length}}</p>
+              <p class="display-1 text--primary">{{testUsers.length}}</p>
               <div class="text--primary">Participantes que han obtenido 100 puntos y han terminado el curso.</div>
             </v-card-text>
           </v-card>
@@ -212,7 +204,7 @@ Vue.component('admin',{
       </div>
       <v-spacer></v-spacer>
       <br>
-      <v-data-table  :headers="headers" :items="unfilterData" class="elevation-1">
+      <v-data-table  :headers="headers" :items="testUsers" class="elevation-1">
   <template v-slot:item.state="props">
     <v-edit-dialog :return-value.sync="props.item.state" large persistent @save="updateState(props.item)">
         <div>{{ props.item.state }}</div>

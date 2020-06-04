@@ -14,11 +14,21 @@ SQL;
 
 
 function get_metrics(){
-    $db = new mysqli("localhost", "puntoycoma", "PuntoyComa19;", 'sipot');
+    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
     $data = array();
 
     $query = <<<SQL
-                SELECT DISTINCT email, name, state, org FROM metrics ORDER BY state
+                SELECT
+                    ANY_VALUE(name) AS name,
+                    email,
+                    ANY_VALUE(org) AS org,
+                    ANY_VALUE(state) AS state
+                FROM
+                    metrics
+                GROUP BY
+                    email
+                ORDER BY
+                    state
 SQL;
     $db->set_charset("utf8");
     $result = $db->query($query) or die($db->error);
@@ -32,7 +42,7 @@ SQL;
 }
 
 function get_testusers(){
-    $db = new mysqli("localhost", "puntoycoma", "PuntoyComa19;", 'sipot');
+    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
     $data = array();
 
     $query = <<<SQL
@@ -50,7 +60,7 @@ SQL;
 }
 
 function testusers($post_data){
-    $db = new mysqli("localhost", "puntoycoma", "PuntoyComa19;", 'sipot');
+    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
     $status = property_exists($post_data, 'status') ? $post_data->status : 'Sin Enviar';
 
 
