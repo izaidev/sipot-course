@@ -8,6 +8,10 @@ if($obj->action == 'metrics')
     metrics($obj);
 if($obj->action == 'testusers')
     testusers($obj);
+if($obj->action == 'get_metrics')
+    $obj = get_metrics();
+if($obj->action == 'get_testusers')
+    $obj = get_testusers();
 
 
 

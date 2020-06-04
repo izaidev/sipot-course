@@ -77,85 +77,55 @@ vm.exportCSVFile(headers, itemsFormatted, fileTitle); // call the exportCSVFile(
 
 const mountedFn = function(){
   const vm = this;
-  vm.db.collection("metrics").orderBy('state').get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          vm.dataArray.push(doc.data().email);
-          vm.unfilteredTestUsers.push(doc.data());
-          vm.uniqueUsers = [... new Set(vm.dataArray)];
-      });
+  axios.post('../api/', {action: 'get_metrics'})
+    .then(function(response){
+      vm.unfilteredTestUsers = response.data;
+      vm.uniqueUsers = response.data;
     })
-    .catch(function(error) {
-        alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-    });
-  vm.db.collection("testusers").orderBy('state').get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc){
-        let docData = doc.data();
-        docData.docID = doc.id;
-        docData.index = vm.completed;
-        docData.status = doc.data().hasOwnProperty('status') ? doc.data().status : 'Sin Enviar';
-        vm.completedUsers.push(docData.email);
-        vm.unfilterData.push(docData);
-        vm.filteredUsers =  [... new Set(vm.completedUsers)];
-        vm.completed += 1;
-          
-          
-          // console.log(hasDuplicates);
-      });
-  //     let seen = new Set();
-  //     vm.unfilterData.some(function(currentObject) {
-  //       if(seen.size === seen.add(currentObject.name).size){
-  //         return true;
-          
-  //       }
-  //       else{
-  //        //  console.log(currentObject);
-  //        vm.filteredUsers.push(currentObject);
-  //       }
-  //       console.log(vm.unfilterData);
-  //  });
+    .catch((error) => console.log(error));
+
+  axios.post('../api/', {action: 'get_testusers'})
+    .then(function(response){
+      vm.completedUsers = response.data;
+      vm.unfilterData = response.data;
+      vm.filteredUsers = response.data;
     })
-    .catch(function(error) {
-        alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-    });
-  
+    .catch((error) => console.log(error));
 
 }
 
 
 // const mountedFn = function(){
-//   const vm = this;
-//   // vm.db.collection("metrics").orderBy('state').get()
-//   //   .then(function(querySnapshot) {
-//   //     querySnapshot.forEach(function(doc) {
-//   //       let metricsData = doc.data();
-//   //       axios.post('http://localhost/sipot/api/metrics', metricsData)
-//   //         .then((response) => console.log(response))
-//   //         .catch((error) => console.log(error));
-//   //     });
-//   //   })
-//   //   .catch(function(error) {
-//   //       alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-//   //   });
+  // const vm = this;
+  // vm.db.collection("metrics").orderBy('state').get()
+  //   .then(function(querySnapshot) {
+  //     querySnapshot.forEach(function(doc) {
+  //       let metricsData = doc.data();
+  //       axios.post('http://localhost/sipot/api/metrics', metricsData)
+  //         .then((response) => console.log(response))
+  //         .catch((error) => console.log(error));
+  //     });
+  //   })
+  //   .catch(function(error) {
+  //       alert('Ocurrió un error inesperado, contacta al administrador:' + error);
+  //   });
 
-//   vm.db.collection("testusers").orderBy('state').get()
-//     .then(function(querySnapshot) {
-//       querySnapshot.forEach(function(doc){
-//         let testData = doc.data();
-//         axios.post('http://localhost/sipot/api/testusers', testData)
-//           .then((response) => console.log(response))
-//           .catch((error) => console.log(error));
+  // vm.db.collection("testusers").orderBy('state').get()
+  //   .then(function(querySnapshot) {
+  //     querySnapshot.forEach(function(doc){
+  //       let testData = doc.data();
+  //       axios.post('http://localhost/sipot/api/testusers', testData)
+  //         .then((response) => console.log(response))
+  //         .catch((error) => console.log(error));
   
           
-//       });
+  //     });
 
-//     })
-//     .catch(function(error) {
-//         alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-//     });
+  //   })
+  //   .catch(function(error) {
+  //       alert('Ocurrió un error inesperado, contacta al administrador:' + error);
+  //   });
   
-
 // }
 
 const updateState = function(dataObj){

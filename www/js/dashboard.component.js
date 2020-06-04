@@ -22,7 +22,7 @@ const sendToIzai = function(){
   const vm = this;
   const userData = JSON.parse(localStorage.getItem('userData'));
   userData.action = 'testusers';
-  axios.post('http://localhost/sipot/api/', userData)
+  axios.post('api/', userData)
     .then((response) =>  self.location = 'https://izai.org.mx/')
     .catch((error) => console.log(error));
 }
@@ -51,7 +51,7 @@ const startCourse = function(){
     action: 'metrics'
   }
   localStorage.setItem("userData", JSON.stringify(userData));
-  axios.post('http://localhost/sipot/api/', userData)
+  axios.post('api/', userData)
     .then((response) =>  vm.introDialog = false)
     .catch((error) => console.log(error));
 
