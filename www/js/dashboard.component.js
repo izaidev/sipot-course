@@ -21,13 +21,10 @@ const sendAnswers = function(){
 const sendToIzai = function(){
   const vm = this;
   const userData = JSON.parse(localStorage.getItem('userData'));
-  vm.db.collection("testusers").add(userData)
-    .then(function() {
-        self.location = 'https://izai.org.mx/';
-    })
-    .catch(function(error) {
-        alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-    });
+  userData.action = 'testusers';
+  axios.post('http://localhost/sipot/api/', userData)
+    .then((response) =>  self.location = 'https://izai.org.mx/')
+    .catch((error) => console.log(error));
 }
 
 const mountedFn = function(){
@@ -50,17 +47,14 @@ const startCourse = function(){
     name: vm.name,
     email: vm.email,
     org: vm.org,
-    state: vm.state
+    state: vm.state,
+    action: 'metrics'
   }
-  console.log('hola');
-  // localStorage.setItem("userData", JSON.stringify(userData));
-  vm.db.collection("metrics").add(userData)
-    .then(function() {
-      // vm.introDialog = false;
-    })
-    .catch(function(error) {
-        alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-    });
+  localStorage.setItem("userData", JSON.stringify(userData));
+  axios.post('http://localhost/sipot/api/', userData)
+    .then((response) =>  vm.introDialog = false)
+    .catch((error) => console.log(error));
+
   
   
 }
@@ -152,7 +146,6 @@ Vue.component('dashboard',{
             bodyText: "",
             title: ""
           },
-          // states: [{"text":"Aguascalientes","q":"01"},{"name":"Baja California","value":"02"},{"name":"Baja California Sur","value":"03"},{"name":"Campeche","value":"04"},{"name":"Coahuila de Zaragoza","value":"05"},{"name":"Colima","value":"06"},{"name":"Chiapas","value":"07"},{"name":"Chihuahua","value":"08"},{"name":"Ciudad de México","value":"09"},{"name":"Durango","value":"10"},{"name":"Guanajuato","value":"11"},{"name":"Guerrero","value":"12"},{"name":"Hidalgo","value":"13"},{"name":"Jalisco","value":"14"},{"name":"México","value":"15"},{"name":"Michoacán de Ocampo","value":"16"},{"name":"Morelos","value":"17"},{"name":"Nayarit","value":"18"},{"name":"Nuevo León","value":"19"},{"name":"Oaxaca","value":"20"},{"name":"Puebla","value":"21"},{"name":"Querétaro","value":"22"},{"name":"Quintana Roo","value":"23"},{"name":"San Luis Potosí","value":"24"},{"name":"Sinaloa","value":"25"},{"name":"Sonora","value":"26"},{"name":"Tabasco","value":"27"},{"name":"Tamaulipas","value":"28"},{"name":"Tlaxcala","value":"29"},{"name":"Veracruz de Ignacio de la Llave","value":"30"},{"name":"Yucatán","value":"31"},{"name":"Zacatecas","value":"32"}]
           states: ["Aguascalientes","Baja California","Baja California Sur","Campeche","Coahuila de Zaragoza","Colima","Chiapas","Chihuahua","Ciudad de México","Durango","Guanajuato","Guerrero","Hidalgo","Jalisco","México","Michoacán de Ocampo","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz de Ignacio de la Llave","Yucatán","Zacatecas"]
         }),
         methods:{sendAnswers,sendToIzai,startCourse},
