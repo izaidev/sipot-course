@@ -95,39 +95,6 @@ const mountedFn = function(){
 }
 
 
-// const mountedFn = function(){
-  // const vm = this;
-  // vm.db.collection("metrics").orderBy('state').get()
-  //   .then(function(querySnapshot) {
-  //     querySnapshot.forEach(function(doc) {
-  //       let metricsData = doc.data();
-  //       axios.post('http://localhost/sipot/api/metrics', metricsData)
-  //         .then((response) => console.log(response))
-  //         .catch((error) => console.log(error));
-  //     });
-  //   })
-  //   .catch(function(error) {
-  //       alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-  //   });
-
-  // vm.db.collection("testusers").orderBy('state').get()
-  //   .then(function(querySnapshot) {
-  //     querySnapshot.forEach(function(doc){
-  //       let testData = doc.data();
-  //       axios.post('http://localhost/sipot/api/testusers', testData)
-  //         .then((response) => console.log(response))
-  //         .catch((error) => console.log(error));
-  
-          
-  //     });
-
-  //   })
-  //   .catch(function(error) {
-  //       alert('Ocurrió un error inesperado, contacta al administrador:' + error);
-  //   });
-  
-// }
-
 const updateState = function(dataObj){
   const vm = this; 
   console.log(dataObj);
