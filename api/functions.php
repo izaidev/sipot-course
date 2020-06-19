@@ -4,7 +4,7 @@ function metrics($post_data){
     $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
 
     $query = <<<SQL
-                INSERT INTO metrics VALUES (NULL,'$post_data->name','$post_data->email','$post_data->org','$post_data->state');
+                INSERT INTO metrics VALUES (NULL,'$post_data->name','$post_data->email','$post_data->org','$post_data->state',NOW());
 SQL;
     $db->set_charset("utf8");
     $db->query($query) or die($db->error);
@@ -65,7 +65,7 @@ function testusers($post_data){
 
 
     $query = <<<SQL
-                INSERT INTO testusers VALUES (NULL,'$post_data->name','$post_data->email','$post_data->org','$post_data->state','$status');
+                INSERT INTO testusers VALUES (NULL,'$post_data->name','$post_data->email','$post_data->org','$post_data->state','$status',NOW());
 SQL;
     $db->set_charset("utf8");
     $db->query($query) or die($db->error);
