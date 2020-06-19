@@ -77,20 +77,22 @@ vm.exportCSVFile(headers, itemsFormatted, fileTitle); // call the exportCSVFile(
 
 const mountedFn = function(){
   const vm = this;
-  axios.post('../api/', {action: 'get_metrics'})
+  axios.post('api/', {action: 'get_metrics'})
     .then(function(response){
       console.log(response)
       vm.metricsUsers = response.data;
     })
     .catch((error) => console.log(error));
 
-  axios.post('../api/', {action: 'get_testusers'})
+  axios.post('api/', {action: 'get_testusers'})
     .then(function(response){
       vm.testUsers = response.data;
     })
     .catch((error) => console.log(error));
 
 }
+
+
 
 
 const updateState = function(dataObj){
@@ -106,11 +108,14 @@ const updateState = function(dataObj){
 
 const updateStatus = function(testData){
   const vm = this;
-    // vm.unfilterData[testData.index].status = 'Enviado';
-    // let ref = vm.db.collection("testusers").doc(testData.docID);
-    //     ref.update({status: 'Enviado'})
-    //     .then(() => console.log())
-    //     .catch((error) => console.log(error))
+  let index = vm.testUsers.findIndex(x => x.testID === testData.testID);
+  vm.testUsers[index].status = 'Enviado';
+  axios.post('api/', {action: 'update_status', testID: testData.testID})
+    .then(function(response){
+      console.log(response)
+    })
+    .catch((error) => console.log(error));
+    
         
 }
 
@@ -153,6 +158,8 @@ Vue.component('admin',{
             { text: 'Acciones', value: 'actions', sortable: false },
   
           ],
+          states: ["Aguascalientes","Baja California","Baja California Sur","Campeche","Coahuila de Zaragoza","Colima","Chiapas","Chihuahua","Ciudad de México","Durango","Guanajuato","Guerrero","Hidalgo","Jalisco","México","Michoacán de Ocampo","Morelos","Nayarit","Nuevo León","Oaxaca","Puebla","Querétaro","Quintana Roo","San Luis Potosí","Sinaloa","Sonora","Tabasco","Tamaulipas","Tlaxcala","Veracruz de Ignacio de la Llave","Yucatán","Zacatecas"],
+          state: null,
         }),
         methods:{updateState,updateStatus,deleteDocument,confirmDelete,convertToCSV,exportCSVFile,exportData},
         mounted: mountedFn,
@@ -195,12 +202,12 @@ Vue.component('admin',{
             <v-btn color="primary darken-1" text @click="confirmDelete">Aceptar</v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
-
-      </v-container>
-      <div style="margin-left: 10px;">
-      <v-btn color="green darken-3" dark @click="exportData('Registrados')">Exportar Registrados <v-icon right dark>mdi-file-excel-box</v-icon></v-btn>
-      <v-btn color="green darken-3" dark @click="exportData('Completados')">Exportar Completados <v-icon right dark>mdi-file-excel-box</v-icon></v-btn>
+        </v-dialog>
+        </v-container>
+        <div style="margin-left: 10px;">
+        <v-btn color="green darken-3" dark @click="exportData('Registrados')">Exportar Registrados <v-icon right dark>mdi-file-excel-box</v-icon></v-btn>
+        <v-btn color="green darken-3" dark @click="exportData('Completados')">Exportar Completados <v-icon right dark>mdi-file-excel-box</v-icon></v-btn>
+        <v-select :items="states" label="Estado" v-model="state"></v-select>
       </div>
       <v-spacer></v-spacer>
       <br>

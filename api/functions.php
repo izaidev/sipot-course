@@ -14,7 +14,7 @@ SQL;
 
 
 function get_metrics(){
-    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
+     $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
     $data = array();
 
     $query = <<<SQL
@@ -42,11 +42,11 @@ SQL;
 }
 
 function get_testusers(){
-    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
+     $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
     $data = array();
 
     $query = <<<SQL
-                SELECT DISTINCT email, name, state, org, status FROM testusers ORDER BY state
+                SELECT DISTINCT email, name, state, org, testID, status FROM testusers ORDER BY state
 SQL;
     $db->set_charset("utf8");
     $result = $db->query($query) or die($db->error);
@@ -66,6 +66,19 @@ function testusers($post_data){
 
     $query = <<<SQL
                 INSERT INTO testusers VALUES (NULL,'$post_data->name','$post_data->email','$post_data->org','$post_data->state','$status');
+SQL;
+    $db->set_charset("utf8");
+    $db->query($query) or die($db->error);
+    $db->close();
+}
+
+
+function update_status($post_data){
+    $db = new mysqli("localhost", "izaiorg7_sipot_course", "PuntoyComa19;", 'izaiorg7_sipot_course');
+
+
+    $query = <<<SQL
+               UPDATE testusers SET status = 'Enviado' WHERE testID = $post_data->testID;
 SQL;
     $db->set_charset("utf8");
     $db->query($query) or die($db->error);

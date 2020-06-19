@@ -13,6 +13,8 @@ if($obj->action == 'get_metrics')
     $response = get_metrics();
 if($obj->action == 'get_testusers')
     $response = get_testusers();
+if($obj->action == 'update_status')
+    $response = update_status($obj);
 
 
 
